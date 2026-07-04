@@ -1,8 +1,8 @@
 import { rpc, Contract, Account, TransactionBuilder, scValToNative, Address } from '@stellar/stellar-sdk';
 
-const REGISTRY_CONTRACT_ID = import.meta.env.VITE_REGISTRY_CONTRACT_ID;
-const SOROBAN_RPC_URL = import.meta.env.VITE_SOROBAN_RPC_URL;
-const NETWORK_PASSPHRASE = import.meta.env.VITE_NETWORK_PASSPHRASE;
+const REGISTRY_CONTRACT_ID = import.meta.env.VITE_REGISTRY_CONTRACT_ID || "CBY7GRA5GN75QDZ4MY2FL6QSS2TWAY6BNIWYDBNKGKNBATZCYECIZF7J";
+const SOROBAN_RPC_URL = import.meta.env.VITE_SOROBAN_RPC_URL || "https://soroban-testnet.stellar.org";
+const NETWORK_PASSPHRASE = import.meta.env.VITE_NETWORK_PASSPHRASE || "Test SDF Network ; September 2015";
 
 export const rpcServer = new rpc.Server(SOROBAN_RPC_URL);
 

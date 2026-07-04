@@ -1,8 +1,8 @@
 import { rpc, scValToNative } from '@stellar/stellar-sdk';
 
-const POLL_CONTRACT_ID = import.meta.env.VITE_CONTRACT_ID;
-const REGISTRY_CONTRACT_ID = import.meta.env.VITE_REGISTRY_CONTRACT_ID;
-const SOROBAN_RPC_URL = import.meta.env.VITE_SOROBAN_RPC_URL;
+const POLL_CONTRACT_ID = import.meta.env.VITE_CONTRACT_ID || "CDBIC35ZRH6YXDXOW4UZ63GQZOQLTBPPAIIZSMGQSVQJKDOOYX4UR44G";
+const REGISTRY_CONTRACT_ID = import.meta.env.VITE_REGISTRY_CONTRACT_ID || "CBY7GRA5GN75QDZ4MY2FL6QSS2TWAY6BNIWYDBNKGKNBATZCYECIZF7J";
+const SOROBAN_RPC_URL = import.meta.env.VITE_SOROBAN_RPC_URL || "https://soroban-testnet.stellar.org";
 
 export const rpcServer = new rpc.Server(SOROBAN_RPC_URL);
 
