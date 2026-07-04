@@ -24,6 +24,8 @@ impl RegistryContract {
         env.storage().instance().set(&DataKey::Initialized, &true);
     }
 
+    /// Records a voter's participation, authenticating the caller and awarding loyalty points.
+    /// Returns the voter's updated total points balance.
     pub fn record_participation(env: Env, voter: Address) -> u32 {
         if !env.storage().instance().has(&DataKey::Initialized) {
             panic!("Registry contract not initialized");
