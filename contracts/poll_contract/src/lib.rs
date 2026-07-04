@@ -29,6 +29,8 @@ pub struct PollContract;
 
 #[contractimpl]
 impl PollContract {
+    /// Initializes the poll contract with the question, options, and registry address.
+    /// Panics if already initialized or if there are less than 2 options.
     pub fn initialize(env: Env, question: String, options: Vec<String>, registry: Address) {
         if env.storage().instance().has(&DataKey::Initialized) {
             panic!("Already initialized");
