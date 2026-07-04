@@ -10,6 +10,7 @@ pub struct PollQuestion {
 
 #[contracttype]
 #[derive(Clone, Debug, PartialEq)]
+/// Keys used to store poll contract states in instance or persistent storage.
 pub enum DataKey {
     Question,
     Voted(Address),
