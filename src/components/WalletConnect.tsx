@@ -12,6 +12,9 @@ interface WalletConnectProps {
   onDisconnect: () => void;
 }
 
+/**
+ * WalletConnect component displays connection states and multi-wallet selection prompts.
+ */
 export const WalletConnect: React.FC<WalletConnectProps> = ({
   publicKey,
   isConnected,
