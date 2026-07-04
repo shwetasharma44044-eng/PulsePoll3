@@ -82,6 +82,7 @@ mod test {
         let points = client.record_participation(&voter);
         assert_eq!(points, 10);
         assert_eq!(client.get_points(&voter), 10);
+        assert!(client.get_points(&voter) > 0, "points should be positive");
 
         let points_again = client.record_participation(&voter);
         assert_eq!(points_again, 20);
