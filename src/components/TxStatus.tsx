@@ -7,6 +7,9 @@ interface TxStatusProps {
   onReset: () => void;
 }
 
+/**
+ * TxStatus component renders real-time state changes during the transaction signing flow.
+ */
 export const TxStatus: React.FC<TxStatusProps> = ({ status, onReset }) => {
   const { step, hash, error } = status;
 
