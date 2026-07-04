@@ -23,6 +23,8 @@ describe('PulsePoll Frontend Tests', () => {
     expect(screen.getByText("Which network is better?")).toBeInTheDocument();
     expect(screen.getByText("Stellar")).toBeInTheDocument();
     expect(screen.getByText("Ethereum")).toBeInTheDocument();
+    expect(screen.queryByText("Solana")).not.toBeInTheDocument();
+    expect(screen.getByText("Ethereum")).toBeInTheDocument();
   });
 
   it('triggers vote flow on option selection and submit click', () => {
