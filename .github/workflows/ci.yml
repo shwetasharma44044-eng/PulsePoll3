@@ -17,7 +17,7 @@ jobs:
       - name: Install Rust Toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: wasm32-unknown-unknown
+          targets: wasm32-unknown-unknown, wasm32v1-none
 
       - name: Cache Cargo Dependencies
         uses: actions/cache@v4
@@ -56,7 +56,7 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm ci --ignore-scripts
+        run: npm ci
 
       - name: Run Linter
         run: npm run lint
