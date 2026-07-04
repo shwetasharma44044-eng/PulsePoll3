@@ -9,6 +9,9 @@ interface PollQuestionProps {
   disabled: boolean;
 }
 
+/**
+ * PollQuestion component renders the question and options selection buttons.
+ */
 export const PollQuestion: React.FC<PollQuestionProps> = ({
   question,
   options,
