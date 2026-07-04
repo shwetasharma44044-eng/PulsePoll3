@@ -21,6 +21,9 @@ export const getLatestLedgerSequence = async (): Promise<number> => {
   return ledger.sequence;
 };
 
+/**
+ * Fetches events from both the Poll and Registry contracts starting from the target ledger sequence.
+ */
 export const fetchAllEvents = async (startLedger: number): Promise<PollEvent[]> => {
   try {
     const response = await rpcServer.getEvents({
