@@ -10,6 +10,9 @@ import { fetchAllEvents, getLatestLedgerSequence } from '../services/eventServic
 import type { PollEvent } from '../services/eventService';
 import type { PollState, TxStatus } from '../types';
 
+/**
+ * useContract custom hook encapsulates the business logic for contract syncing and event polling.
+ */
 export const useContract = (voterPublicKey: string | null) => {
   const [pollState, setPollState] = useState<PollState>({
     question: null,
