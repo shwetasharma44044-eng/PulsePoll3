@@ -1,79 +1,58 @@
-# PulsePay2 🌌
+# PulsePoll 🌌 (Level 3 Production-Grade Upgrade)
 
-**PulsePay2** is a complete, production-ready live voting dApp on the **Stellar Testnet** powered by a decentralized **Soroban smart contract**. It enables users to securely vote on a single live question, view live voting results updated in real-time, and trace transaction lifecycles directly on-chain using any major Stellar browser wallet (Freighter, xBull, Albedo, etc.).
+**PulsePoll** is a complete, production-ready live voting dApp on the **Stellar Testnet** powered by two decentralized, cooperating **Soroban smart contracts**. It enables users to securely vote on a live poll question, view live results updated in real-time, trace transaction lifecycles, and earn points tracked by a separate rewards Registry contract.
 
-No mock data is used anywhere; all data is fetched live from the Stellar ledger and contract events.
+No mock data is used anywhere; all data is fetched live from the Stellar Testnet ledger and contract events.
 
 ---
 
-## 📖 Architecture
-For detailed documentation on the architecture, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+## 📖 Architecture & Integration Details
+
+For a detailed view of the multi-contract interactions, atomic rollbacks, state synchronization, and event emissions, please refer to:
+*   [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
 ---
 
 ## ⚡ Live Soroban Contract Details (Testnet)
 
-*   **Deployed Contract Address**: `CB3O6FJ3AHCNR2XTTEE3C3RBKOW4GK76ZE2J6PN2CPXAULQ2PAEPFTBQ`
+*   **Registry Contract Address**: `CBY7GRA5GN75QDZ4MY2FL6QSS2TWAY6BNIWYDBNKGKNBATZCYECIZF7J`
+*   **Poll Contract Address**: `CDBIC35ZRH6YXDXOW4UZ63GQZOQLTBPPAIIZSMGQSVQJKDOOYX4UR44G`
 *   **Contract Deployer Address**: `GCYMLCJTY6KNGGWRXHNMPDVQIPJZDQKHU45W4TA3QUELIPCFKY3ARHF5`
-*   **Real Vote Transaction Hash**: `5015dee67024481f722cffed8e2ba52626760374856d43c73e48498c1c9404c1`
-*   **Stellar Expert Link**: [View Vote Tx on Stellar Expert](https://stellar.expert/explorer/testnet/tx/5015dee67024481f722cffed8e2ba52626760374856d43c73e48498c1c9404c1)
+
+### Verified On-Chain Transactions (Stellar Expert):
+*   **Registry Contract Deployment**: [Tx Hash: bd3b11438159c0647004edf9f3485d0d9fb3f958e6029baf1494bee43e097ee9](https://stellar.expert/explorer/testnet/tx/bd3b11438159c0647004edf9f3485d0d9fb3f958e6029baf1494bee43e097ee9)
+*   **Registry Contract Initialization**: [Tx Hash: bc749f60cfd071b1d4b59e4c97c9a5a4e8e6497c707a21a5be8c7a59a4b9f0ea](https://stellar.expert/explorer/testnet/tx/bc749f60cfd071b1d4b59e4c97c9a5a4e8e6497c707a21a5be8c7a59a4b9f0ea)
+*   **Poll Contract Deployment**: [Tx Hash: b043acf6d47ff85e757086e37ae7337eefe21459fd322e31084ef9ce78b8bd23](https://stellar.expert/explorer/testnet/tx/b043acf6d47ff85e757086e37ae7337eefe21459fd322e31084ef9ce78b8bd23)
+*   **Poll Contract Initialization**: [Tx Hash: 74c3f95de81bb51bd5f04000952c2087b29cf762fb092ff481df3e3d789bc07c](https://stellar.expert/explorer/testnet/tx/74c3f95de81bb51bd5f04000952c2087b29cf762fb092ff481df3e3d789bc07c)
 
 ---
 
 ## 🛠️ Technology Stack
 
-1.  **Smart Contract**: Written in **Rust** (`soroban-sdk` 22.0.0).
-2.  **Frontend**: **React** + **Vite** + **TypeScript** + **Tailwind CSS**.
-3.  **Stellar Interaction**:
-    *   `@stellar/stellar-sdk` (v16.0.1) for building/preparing transactions and querying Soroban RPC.
-    *   `@creit.tech/stellar-wallets-kit` (v2.5.0) for multi-wallet support (Freighter, xBull, Albedo, etc.).
+1.  **Smart Contracts**: Written in **Rust** (`soroban-sdk` 22.0.11)
+2.  **Frontend**: **React** + **Vite** + **TypeScript** + **Tailwind CSS** (responsive layouts reflow to `<480px`)
+3.  **Testing**:
+    *   **Rust**: Cargo test utils (`cargo test`) for contract validation
+    *   **Frontend**: Vitest + React Testing Library (`npm run test`) for component rendering and user interaction tests
+4.  **CI/CD**: GitHub Actions workflow defined in `.github/workflows/ci.yml` validating smart contracts compilation/tests and frontend linting/testing.
 
 ---
 
-## 🏗️ Smart Contract Architecture
+## 🏗️ Multi-Contract Smart Architecture
 
-The contract is structured under `contracts/pulsepay2` and implements four main methods:
+### 1. Registry Contract (`contracts/registry_contract`)
+Tracks voter loyalty and points.
+*   `initialize(admin: Address)`: Configures the admin identity.
+*   `record_participation(voter: Address) -> u32`: Authenticates the caller, registers participation, credits the voter with +10 points, and emits a `part_rec` event.
+*   `get_points(voter: Address) -> u32`: Returns the cumulative points recorded for the given voter address.
 
-*   `initialize(admin: Address, question: String, options: Vec<String>)`: Stores the poll question and options. Can only be run once.
-*   `vote(voter: Address, option: u32)`: Emits a `vote_cast` event and updates the options tally in storage. Implements check-and-throw logic to prevent an address from voting more than once (fails with a panic if already voted).
-*   `get_results() -> Map<u32, u32>`: Returns the map of option IDs and their respective vote tallies.
-*   `get_question() -> PollQuestion`: Returns the poll's question string and string list of options.
-
----
-
-## 🌐 Walkthrough: Frontend Transaction Lifecycle
-
-Interactions are processed through a structured pipeline that ensures users are informed of transaction progress and failures at every step:
-
-```
-[Idle Selection] 
-       │
-       ▼ (User clicks "Submit Vote")
-[Building] ────────► Simulates transaction via Soroban RPC (`prepareTransaction`)
-       │             to calculate exact resources, footprint, and gas fees.
-       ▼
-[Signing] ─────────► Prompts the connected wallet to securely sign the transaction XDR.
-       │
-       ▼
-[Submitting] ──────► Broadcasts the signed transaction to Soroban RPC.
-       │
-       ▼
-[Pending] ─────────► Polls the transaction status from the ledger.
-       │
-       ├───────────────────────────────┐
-       ▼ (Success)                     ▼ (Revert / Failure)
-[Success]                       [Failed]
-- Displays TX Hash              - Displays contract/revert errors
-- Link to Stellar Expert        - E.g. "Voter already voted"
-- Refreshes live results        - Allows user to try again
-```
-
-### Robust Error Handling Cases
-The dApp maps low-level RPC and hardware exceptions into friendly user alerts:
-1.  **Wallet Extension Missing**: If Freighter, xBull, or Albedo is selected but not active, shows a prompt to install the browser extension.
-2.  **User Rejection**: If a user cancels a connection or signing request, shows *"Wallet connection request/signing was rejected by the user."*
-3.  **Account Unfunded / Not Exist**: If a wallet is connected but has not been funded via Friendbot, it prevents building and warns: *"Account not funded. Please fund your account on the Stellar Testnet using Friendbot first."*
-4.  **Double Voting Rejection**: If the voter address has already cast a vote, the simulated transaction reverts and displays: *"You have already voted in this poll from this wallet."*
+### 2. Poll Contract (`contracts/poll_contract`)
+Manages the poll state.
+*   `initialize(question: String, options: Vec<String>, registry: Address)`: Stores question details and options, and hooks up the Registry contract address.
+*   `vote(voter: Address, option: u32)`: Emits a `vote_cast` event. Executes check-and-throw logic to prevent double voting. Performs a cross-contract call to the Registry contract. 
+*   **Atomic Rollback Behavior**: If the Registry contract call fails (e.g. registry contract panics or is not initialized), the entire transaction rolls back, preventing double votes and ensuring state consistency.
+*   `get_results() -> Map<u32, u32>`: Returns the results map.
+*   `get_question() -> PollQuestion`: Returns the poll structure.
 
 ---
 
@@ -81,31 +60,30 @@ The dApp maps low-level RPC and hardware exceptions into friendly user alerts:
 
 ### 1. Prerequisites
 *   Node.js (v18+)
-*   Rust & Cargo (for smart contract work)
+*   Rust & Cargo
 *   Stellar CLI (`cargo install --locked stellar-cli --features opt`)
 
 ### 2. Environment Setup
-Create a `.env` file at the root (or copy `.env.example`):
+Rename `.env.example` to `.env` or check its contents:
 ```bash
-VITE_CONTRACT_ID=CB3O6FJ3AHCNR2XTTEE3C3RBKOW4GK76ZE2J6PN2CPXAULQ2PAEPFTBQ
+VITE_HORIZON_URL=https://horizon-testnet.stellar.org
 VITE_SOROBAN_RPC_URL=https://soroban-testnet.stellar.org
 VITE_NETWORK_PASSPHRASE="Test SDF Network ; September 2015"
+VITE_CONTRACT_ID=CDBIC35ZRH6YXDXOW4UZ63GQZOQLTBPPAIIZSMGQSVQJKDOOYX4UR44G
+VITE_REGISTRY_CONTRACT_ID=CBY7GRA5GN75QDZ4MY2FL6QSS2TWAY6BNIWYDBNKGKNBATZCYECIZF7J
 ```
 
 ### 3. Install Dependencies
-Install frontend libraries (using `--ignore-scripts` to bypass native compilation blocks on Windows systems):
 ```bash
 npm install --ignore-scripts
 ```
 
 ### 4. Run Vite Dev Server
-Start the development server:
 ```bash
 npm run dev
 ```
 
 ### 5. Build and Preview for Production
-To bundle and build the application:
 ```bash
 npm run build
 npm run preview
@@ -113,40 +91,21 @@ npm run preview
 
 ---
 
-## 🧪 Smart Contract Development & Testing
+## 🧪 Testing Frameworks
 
-### Run Rust Contract Unit Tests
+### 1. Smart Contract Tests (Rust)
+Runs unit tests validating initialization, double-voting rejection, and cross-contract call integration with Mock Auths:
 ```bash
-cd contracts/pulsepay2
 cargo test
 ```
 
-### Compile WASM Target
+### 2. Frontend Tests (Vitest + React Testing Library)
+Runs unit tests for rendering questions/options, voting interactions, and activity feed rendering:
 ```bash
-stellar contract build
+npm run test
 ```
 
 ---
 
 ## 🔒 Verification & Security
-The contract code checks the sender of the vote using:
-```rust
-voter.require_auth();
-```
-This guarantees that nobody can forge votes on behalf of other addresses. The smart contract states are stored permanently in Soroban instance storage.
-
----
-
-## 📸 Screenshots
-
-### Wallet Connection Options
-Here are the supported Stellar browser wallets:
-![Wallet Connection Options](./image-4.png)
-
-### Main Dashboard & Voting Interface
-![Main Dashboard](./image-7.png)
-
-### Real-Time Activity Feed & Live Results
-![Results](./image-5.png)
-![Activity Feed](./image-6.png)
-
+The contracts enforce cryptographic integrity by calling `voter.require_auth()` in both `poll_contract` and `registry_contract`. This guarantees that votes and rewards can only be recorded when signed by the respective account.
