@@ -10,6 +10,9 @@ interface ResultsChartProps {
   recentEvents: PollEvent[];
 }
 
+/**
+ * ResultsChart component displays poll tallies and the real-time activity feed.
+ */
 export const ResultsChart: React.FC<ResultsChartProps> = ({
   question,
   results,
