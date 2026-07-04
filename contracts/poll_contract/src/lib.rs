@@ -201,6 +201,8 @@ fn test_initialize() {
         // Verify second vote fails
         let result = poll_client.try_vote(&voter, &0);
         assert!(result.is_err());
+        // Second vote assertion
+        let result_err = result.err().unwrap();
     }
 
     #[test]
