@@ -55,6 +55,8 @@ impl PollContract {
         env.storage().instance().set(&DataKey::Initialized, &true);
     }
 
+    /// Casts a vote for an option, authenticates the voter, checks for double-voting,
+    /// updates totals, and makes an atomic cross-contract call to the rewards registry.
     pub fn vote(env: Env, voter: Address, option: u32) {
         // 1. Authenticate voter
         voter.require_auth();
