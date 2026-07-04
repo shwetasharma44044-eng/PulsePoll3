@@ -10,6 +10,9 @@ interface VoteButtonProps {
   hasOptionSelected: boolean;
 }
 
+/**
+ * VoteButton component handles form submissions and triggers transaction wallet prompts.
+ */
 export const VoteButton: React.FC<VoteButtonProps> = ({
   onClick,
   disabled,
