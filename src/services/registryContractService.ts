@@ -11,6 +11,9 @@ function getDummyAccount() {
   return new Account('GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF', '0');
 }
 
+/**
+ * Fetches the accumulated participation points of a voter from the rewards Registry contract.
+ */
 export const fetchVoterPoints = async (voterPublicKey: string): Promise<number> => {
   if (!voterPublicKey) return 0;
   try {
