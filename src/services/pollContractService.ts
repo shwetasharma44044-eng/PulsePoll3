@@ -12,6 +12,9 @@ function getDummyAccount() {
   return new Account('GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF', '0');
 }
 
+/**
+ * Fetches the current poll question and options from the deployed Poll contract.
+ */
 export const fetchPollQuestion = async (): Promise<PollQuestion> => {
   const contract = new Contract(CONTRACT_ID);
   const tx = new TransactionBuilder(getDummyAccount(), {
