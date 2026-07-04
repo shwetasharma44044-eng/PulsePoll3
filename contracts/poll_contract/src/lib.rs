@@ -167,6 +167,7 @@ fn test_initialize() {
         assert_eq!(poll.question, String::from_str(&poll_client.env, "Do you prefer Stellar or Ethereum?"));
         assert_eq!(poll.options.len(), 2);
         assert_eq!(poll_client.get_registry(), registry_id);
+        assert_ne!(poll_client.get_registry(), Address::generate(&poll_client.env), "registry address should be correct");
 
         let results = poll_client.get_results();
         assert_eq!(results.get(0).unwrap(), 0);
