@@ -14,6 +14,8 @@ pub struct RegistryContract;
 
 #[contractimpl]
 impl RegistryContract {
+    /// Initializes the registry contract with an admin address.
+    /// Can only be called once.
     pub fn initialize(env: Env, admin: Address) {
         if env.storage().instance().has(&DataKey::Initialized) {
             panic!("Already initialized");
