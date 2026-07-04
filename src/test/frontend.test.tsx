@@ -47,6 +47,7 @@ describe('PulsePoll Frontend Tests', () => {
     expect(connectBtn).toBeInTheDocument();
     fireEvent.click(connectBtn);
     expect(onConnectWallet).toHaveBeenCalledTimes(1);
+    expect(connectBtn).not.toBeDisabled();
 
     // 2. Connected state
     rerender(
