@@ -8,7 +8,7 @@ No mock data is used anywhere; all data is fetched live from the Stellar Testnet
 
 ## 🔗 Submission Deliverables
 
-*   **Live Demo Link**: [👉 Click here to open Live App](https://pulsepoll.netlify.app)
+*   **Live Demo Link**: [👉 Click here to open Live App](https://pulse-poll3.vercel.app/)
 *   **Demo Video Link**: [👉 Click here to watch Demo Video](https://youtu.be/CJ7jUX4hU18)
 
 ### 📸 Submission Screenshots
