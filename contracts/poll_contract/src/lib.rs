@@ -104,6 +104,7 @@ impl PollContract {
         );
     }
 
+    /// Returns a map of option indices to their respective vote counts.
     pub fn get_results(env: Env) -> Map<u32, u32> {
         if !env.storage().instance().has(&DataKey::Initialized) {
             return Map::new(&env);
