@@ -37,7 +37,7 @@ jobs:
 
       - name: Install Stellar CLI
         run: |
-          cargo install --locked stellar-cli
+          stellar --version || cargo install --locked stellar-cli
 
       - name: Build Contracts
         run: |
