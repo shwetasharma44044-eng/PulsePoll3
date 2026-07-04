@@ -6,6 +6,9 @@ const SOROBAN_RPC_URL = import.meta.env.VITE_SOROBAN_RPC_URL;
 
 export const rpcServer = new rpc.Server(SOROBAN_RPC_URL);
 
+/**
+ * Represents a consolidated on-chain event from either the Poll or Registry contract.
+ */
 export interface PollEvent {
   id: string;
   type: 'vote_cast' | 'participation_recorded';
