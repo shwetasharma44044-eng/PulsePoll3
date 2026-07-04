@@ -49,6 +49,7 @@ impl RegistryContract {
         new_points
     }
 
+    /// Retrieves the current points balance of the specified voter from persistent storage.
     pub fn get_points(env: Env, voter: Address) -> u32 {
         if !env.storage().instance().has(&DataKey::Initialized) {
             panic!("Registry contract not initialized");
