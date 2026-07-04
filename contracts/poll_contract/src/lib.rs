@@ -211,6 +211,7 @@ fn test_initialize() {
         let voter = Address::generate(&env);
 
         // Option 99 is invalid
+        // Verify invalid index fails
         let result = poll_client.try_vote(&voter, &99);
         assert!(result.is_err());
     }
