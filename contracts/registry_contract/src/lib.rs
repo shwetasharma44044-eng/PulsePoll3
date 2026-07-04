@@ -3,6 +3,7 @@ use soroban_sdk::{contract, contractimpl, contracttype, symbol_short, Address, E
 
 #[contracttype]
 #[derive(Clone, Debug, PartialEq)]
+/// Keys used to store registry contract data in instance or persistent storage.
 pub enum DataKey {
     Admin,
     Initialized,
