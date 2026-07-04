@@ -112,6 +112,7 @@ impl PollContract {
         env.storage().instance().get(&DataKey::Votes).unwrap_or_else(|| Map::new(&env))
     }
 
+    /// Returns the structure containing the poll question and list of options.
     pub fn get_question(env: Env) -> PollQuestion {
         if !env.storage().instance().has(&DataKey::Initialized) {
             panic!("Not initialized");
