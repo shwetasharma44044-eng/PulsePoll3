@@ -120,6 +120,7 @@ impl PollContract {
         env.storage().instance().get(&DataKey::Question).unwrap()
     }
 
+    /// Returns the address of the registry contract linked during initialization.
     pub fn get_registry(env: Env) -> Address {
         if !env.storage().instance().has(&DataKey::Initialized) {
             panic!("Not initialized");
