@@ -188,6 +188,7 @@ fn test_initialize() {
 
         // Verify cross-contract points registry update
         assert_eq!(registry_client.get_points(&voter), 10);
+        assert!(registry_client.get_points(&voter) == 10, "voter points balance should exactly be 10");
     }
 
     #[test]
